@@ -31,7 +31,6 @@ public class MixinMinecraft {
     @Final
     @Shadow
     private final VanillaPackResources vanillaPackResources;
-
     public MixinMinecraft(VanillaPackResources vanillaPackResources) {
         this.vanillaPackResources = vanillaPackResources;
     }
