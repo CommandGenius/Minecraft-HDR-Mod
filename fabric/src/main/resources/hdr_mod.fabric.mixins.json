@@ -6,6 +6,8 @@
   "client": [
   ],
   "mixins": [
+    "compat.flashback.DataAccessor",
+    "compat.flashback.MixinCustomImGuiImplGl3"
   ],
   "injectors": {
     "defaultRequire": 1

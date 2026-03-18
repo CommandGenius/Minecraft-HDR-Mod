@@ -1,5 +1,5 @@
-package xyz.rrtt217.HDRMod.fabric.mixin.compat.axiom;
 /*
+package xyz.rrtt217.HDRMod.fabric.mixin.compat.axiom;
 import com.moulberry.axiom.editor.CustomImGuiImplGl3;
 import org.spongepowered.asm.mixin.Mixin;
 

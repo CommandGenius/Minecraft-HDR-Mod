@@ -76,7 +76,7 @@ public class PngjHDRScreenshot {
                 return;
             }
 
-            // The actual screenshot part (why it's so slow?)
+            // The actual screenshot part
             // Get the buffer.
             GpuBuffer gpuBuffer = RenderSystem.getDevice().createBuffer(() -> "HDR Mod Screenshot buffer", 9, (long) width * (long) height * 8L);
             CommandEncoder commandEncoder = RenderSystem.getDevice().createCommandEncoder();

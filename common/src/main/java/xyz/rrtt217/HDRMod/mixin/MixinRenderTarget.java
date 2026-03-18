@@ -38,16 +38,17 @@ public class MixinRenderTarget {
     private void hdr_mod$beforeBlitRenderer(CallbackInfo ci) {
         RenderSystem.assertOnRenderThread();
         HDRModConfig config = AutoConfig.getConfigHolder(HDRModConfig.class).getConfig();
-        if (this.colorTexture != null && !this.colorTexture.equals(Minecraft.getInstance().getMainRenderTarget().getColorTexture()))
-            return;
+
         if(HDRMod.PresentationColorTransformRenderer == null)
-            HDRMod.PresentationColorTransformRenderer = new ColorTransformRenderer(Minecraft.getInstance().getMainRenderTarget(), "Presentation");
+            HDRMod.PresentationColorTransformRenderer = new ColorTransformRenderer((RenderTarget) (Object) this, "Presentation");
         HDRMod.PresentationColorTransformRenderer.updateColorTransformUBO(
                 config.uiBrightness < 0 ? GLFWColorManagement.glfwGetWindowSdrWhiteLevel(Minecraft.getInstance().getWindow().handle()) : config.uiBrightness, // For UI Brightness
                 config.customEotfEmulate < 0 ? GLFWColorManagement.glfwGetWindowSdrWhiteLevel(Minecraft.getInstance().getWindow().handle()) : config.customEotfEmulate,
                 config.autoSetPrimaries ? GLFWColorManagement.glfwGetWindowPrimaries(Minecraft.getInstance().getWindow().handle()) : config.customPrimaries.getId(),
                 config.autoSetTransferFunction ? GLFWColorManagement.glfwGetWindowTransfer(Minecraft.getInstance().getWindow().handle()) : config.customTransferFunction.getId()
         );
+        if (this.colorTexture != null && !this.colorTexture.equals(HDRMod.PresentationColorTransformRenderer.getSrcTarget().getColorTexture()))
+            HDRMod.PresentationColorTransformRenderer.setSrcTarget((RenderTarget) (Object) this);
         HDRMod.PresentationColorTransformRenderer.render();
     }
 @ModifyArg(method = "blitToScreen", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/CommandEncoder;presentTexture(Lcom/mojang/blaze3d/textures/GpuTextureView;)V"), index = 0)
