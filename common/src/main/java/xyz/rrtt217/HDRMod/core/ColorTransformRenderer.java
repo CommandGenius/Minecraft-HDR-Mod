@@ -1,0 +1,90 @@
+package xyz.rrtt217.HDRMod.core;
+
+import com.mojang.blaze3d.buffers.GpuBuffer;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.platform.DepthTestFunction;
+import com.mojang.blaze3d.shaders.UniformType;
+import com.mojang.blaze3d.systems.RenderPass;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.blaze3d.textures.GpuTexture;
+import com.mojang.blaze3d.textures.GpuTextureView;
+import com.mojang.blaze3d.textures.TextureFormat;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.resources.Identifier;
+import org.lwjgl.opengl.GL30;
+import xyz.rrtt217.HDRMod.util.Enums;
+import xyz.rrtt217.HDRMod.util.TextureUpgradeUtils;
+
+import java.util.OptionalInt;
+
+public class ColorTransformRenderer {
+    private final RenderPipeline COLOR_TRANSFORM;
+    private RenderTarget srcTarget;
+    private GpuTexture dstTexture;
+    private GpuTextureView dstTextureView;
+    private int dstTextureFormat;
+    private int dstReadPixelFormat;
+    private ColorTransformUBO colorTransformUbo;
+    private GpuBuffer colorTransformBuffer;
+    public ColorTransformRenderer(RenderTarget srcTarget, String string, int dstTextureFormat) {
+        this.srcTarget = srcTarget;
+        this.colorTransformUbo = new ColorTransformUBO(string);
+        // Set a group of default UBO values. You may call updateColorTransformUBO manually to update later.
+        updateColorTransformUBO(203.0F, 0.0F, Enums.Primaries.SRGB, Enums.TransferFunction.SRGB);
+        this.dstTextureFormat = dstTextureFormat;
+        TextureUpgradeUtils.setTargetTextureFormat(GL30.GL_RGBA16F);
+        TextureUpgradeUtils.setTargetReadPixelFormat(GL30.GL_HALF_FLOAT);
+        this.dstReadPixelFormat = GL30.GL_HALF_FLOAT;
+        this.dstTextureFormat = GL30.GL_RGBA16F;
+        this.dstTexture = RenderSystem.getDevice().createTexture(()->"Color Transform Destination Texture",15, TextureFormat.RGBA8, srcTarget.width, srcTarget.height, 1, 1);
+        this.dstTextureView = RenderSystem.getDevice().createTextureView(this.dstTexture);
+        RenderPipeline.Builder builder = RenderPipeline.builder(new RenderPipeline.Snippet[0]).withLocation("pipeline/color_transform").withFragmentShader(Identifier.fromNamespaceAndPath("hdr_mod","color_transform")).withVertexShader("core/screenquad").withSampler("InSampler").withDepthWrite(false).withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST).withVertexFormat(DefaultVertexFormat.EMPTY, VertexFormat.Mode.TRIANGLES).withUniform("ColorTransform", UniformType.UNIFORM_BUFFER);
+        for(Enums.Primaries p : Enums.Primaries.values()) {
+            builder = builder.withShaderDefine("PRIMARIES_"+p.toString(), p.getId());
+        }
+        for(Enums.TransferFunction tf : Enums.TransferFunction.values()) {
+            builder = builder.withShaderDefine("TRANSFER_FUNCTION_"+tf.toString(), tf.getId());
+        }
+        this.COLOR_TRANSFORM = builder.build();
+    }
+    public void updateColorTransformUBO(float UIBrightness, float EotfEmulate, Enums.Primaries Primaries, Enums.TransferFunction TransferFunction){
+        updateColorTransformUBO(UIBrightness, EotfEmulate, Primaries.getId(), TransferFunction.getId());
+    }
+    public void updateColorTransformUBO(float UIBrightness, float EotfEmulate, int Primaries, int TransferFunction) {
+        if(this.colorTransformUbo == null) {
+            throw new IllegalStateException("Cannot update color transform UBO when UBO is null");
+        }
+        this.colorTransformBuffer = colorTransformUbo.update(UIBrightness, EotfEmulate, Primaries, TransferFunction);
+    }
+    public void resize(){
+        if(this.dstTexture.getHeight(0) != this.srcTarget.height || this.dstTexture.getWidth(0) != this.srcTarget.width){
+            this.recreateTexture();
+        }
+    }
+    public void recreateTexture(){
+        this.dstTextureView.close();
+        this.dstTexture.close();
+        TextureUpgradeUtils.setTargetTextureFormat(this.dstTextureFormat);
+        TextureUpgradeUtils.setTargetReadPixelFormat(this.dstReadPixelFormat);
+        this.dstTexture = RenderSystem.getDevice().createTexture(()->"Color Transform Destination Texture",15, TextureFormat.RGBA8, srcTarget.width, srcTarget.height, 1, 1);
+        this.dstTextureView = RenderSystem.getDevice().createTextureView(this.dstTexture);
+    }
+    public void render(){
+        this.resize();
+        // The actual renderer.
+        if (srcTarget.getColorTextureView() != null) {
+            try (RenderPass renderPass = RenderSystem.getDevice().createCommandEncoder().createRenderPass(() -> "Color Transform", srcTarget.getColorTextureView(), OptionalInt.empty())) {
+                renderPass.setPipeline(this.COLOR_TRANSFORM);
+                RenderSystem.bindDefaultUniforms(renderPass);
+                if (this.colorTransformUbo != null) renderPass.setUniform("ColorTransform", this.colorTransformBuffer);
+                renderPass.bindTexture("InSampler", this.dstTextureView, RenderSystem.getSamplerCache().getClampToEdge(FilterMode.NEAREST));
+                renderPass.draw(0, 3);
+            }
+        } else {
+            throw new IllegalStateException("colorTexture is null");
+        }
+    }
+}

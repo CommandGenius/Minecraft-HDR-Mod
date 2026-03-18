@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import xyz.rrtt217.HDRMod.config.HDRModConfig;
 import xyz.rrtt217.HDRMod.util.HDRModInjectHooks;
+import xyz.rrtt217.HDRMod.util.TextureUpgradeUtils;
 
 import static xyz.rrtt217.HDRMod.HDRMod.enableHDR;
 
@@ -19,16 +20,13 @@ public class MixinGlDevice {
     @ModifyArgs(method = "createTexture(Ljava/lang/String;ILcom/mojang/blaze3d/textures/TextureFormat;IIII)Lcom/mojang/blaze3d/textures/GpuTexture;", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/opengl/GlStateManager;_texImage2D(IIIIIIIILjava/nio/ByteBuffer;)V", ordinal = 1))
     private void hdr_mod$upgradeColorBufferFormat$0(Args args)
     {
-        HDRModConfig config = AutoConfig.getConfigHolder(HDRModConfig.class).getConfig();
-        if(enableHDR && args.get(2).equals(GlConst.toGlInternalId(TextureFormat.RGBA8)) && (!config.onlyUpgradeNecessaryTexture || HDRModInjectHooks.isInjectEnabled())) {
-            if(HDRModInjectHooks.isInject2Enabled() && config.useRGBA16UNORM) {
-                args.set(2,GL30.GL_RGBA16);
-                args.set(7,GL30.GL_UNSIGNED_SHORT);
-            }
-            else {
-                args.set(2, GL30.GL_RGBA16F);
-                args.set(7, GL30.GL_HALF_FLOAT);
-            }
+        if(TextureUpgradeUtils.getTargetTextureFormat() > 0){
+            TextureUpgradeUtils.resetTargetTextureFormat();
+            args.set(2, TextureUpgradeUtils.getTargetTextureFormat());
+        }
+        if(TextureUpgradeUtils.getTargetReadPixelFormat() > 0){
+            TextureUpgradeUtils.resetTargetReadPixelFormat();
+            args.set(7, TextureUpgradeUtils.getTargetReadPixelFormat());
         }
     }
 }
