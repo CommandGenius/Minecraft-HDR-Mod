@@ -20,7 +20,7 @@ import xyz.rrtt217.HDRMod.util.TextureUpgradeUtils;
 
 import java.util.OptionalInt;
 
-public class ColorTransformRenderer {
+public class ColorTransformRenderer implements AutoCloseable {
     static{
         RenderPipeline.Builder builder = RenderPipeline.builder(new RenderPipeline.Snippet[0]).withLocation("pipeline/color_transform").withFragmentShader(Identifier.fromNamespaceAndPath("hdr_mod","color_transform")).withVertexShader("core/screenquad").withSampler("InSampler").withDepthWrite(false).withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST).withVertexFormat(DefaultVertexFormat.EMPTY, VertexFormat.Mode.TRIANGLES).withUniform("ColorTransform", UniformType.UNIFORM_BUFFER);
         for(Enums.Primaries p : Enums.Primaries.values()) {
@@ -105,5 +105,12 @@ public class ColorTransformRenderer {
     }
     public GpuTextureView getDstTextureView(){
         return this.dstTextureView;
+    }
+    public void close(){
+        colorTransformBuffer = null;
+        srcTarget = null;
+        colorTransformUbo.close();
+        dstTextureView.close();
+        dstTexture.close();
     }
 }

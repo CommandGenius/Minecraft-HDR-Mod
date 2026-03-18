@@ -21,33 +21,18 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.rrtt217.HDRMod.HDRMod;
 import xyz.rrtt217.HDRMod.config.HDRModConfig;
-import xyz.rrtt217.HDRMod.core.BeforeBlitRenderer;
 import xyz.rrtt217.HDRMod.core.ColorTransformRenderer;
-import xyz.rrtt217.HDRMod.core.FloatNumberUBO;
 import xyz.rrtt217.HDRMod.util.GLFWColorManagement;
-import xyz.rrtt217.HDRMod.util.HDRModInjectHooks;
 import xyz.rrtt217.HDRMod.util.TextureUpgradeUtils;
 
-import java.util.OptionalInt;
-
-import static xyz.rrtt217.HDRMod.HDRMod.UiBrightnessUBO;
 import static xyz.rrtt217.HDRMod.HDRMod.enableHDR;
 
 @Mixin(RenderTarget.class)
 public class MixinRenderTarget {
-    @Shadow
-    public int width;
-
-    @Shadow
-    public int height;
 
     @Shadow
     @Nullable
     protected GpuTexture colorTexture;
-
-    @Shadow
-    @Nullable
-    protected GpuTextureView colorTextureView;
 
     @Inject(method = "blitToScreen", at = @At("HEAD"))
     private void hdr_mod$beforeBlitRenderer(CallbackInfo ci) {

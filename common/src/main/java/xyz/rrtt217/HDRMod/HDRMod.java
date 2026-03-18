@@ -10,10 +10,8 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
 import org.slf4j.LoggerFactory;
-import xyz.rrtt217.HDRMod.core.BeforeBlitRenderer;
 import xyz.rrtt217.HDRMod.core.ColorTransformRenderer;
 import xyz.rrtt217.HDRMod.core.PngjHDRScreenshot;
-import xyz.rrtt217.HDRMod.core.FloatNumberUBO;
 import org.slf4j.Logger;
 import xyz.rrtt217.HDRMod.config.HDRModConfig;
 
@@ -21,12 +19,8 @@ public final class HDRMod {
     public static final String MOD_ID = "hdr_mod";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    // Global UI brightness UBO.
-    public static FloatNumberUBO UiBrightnessUBO;
-
     // Global Renderers.
     public static ColorTransformRenderer PresentationColorTransformRenderer;
-    public static ColorTransformRenderer ScreenshotColorTransformRenderer;
 
     // Key Mapping.
     public static final KeyMapping.Category HDRModCategory = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("hdr_mod","main"));
