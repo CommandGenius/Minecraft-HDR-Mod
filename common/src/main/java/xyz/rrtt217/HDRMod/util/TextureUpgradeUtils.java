@@ -1,6 +1,9 @@
 package xyz.rrtt217.HDRMod.util;
 
+import org.lwjgl.opengl.GL30;
+
 public class TextureUpgradeUtils {
+    public static final int srcTextureFormat = GL30.GL_RGBA8;
     private static final ThreadLocal<Integer> targetTextureFormat = ThreadLocal.withInitial(()-> -1);
     private static final ThreadLocal<Integer> targetReadPixelFormat = ThreadLocal.withInitial(()-> -1);
     public static void setTargetTextureFormat(int targetTextureFormat){

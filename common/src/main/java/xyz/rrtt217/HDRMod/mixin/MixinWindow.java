@@ -81,18 +81,5 @@ import static xyz.rrtt217.HDRMod.HDRMod.enableHDR;
                 GLFW.glfwGetWindowAttrib(this.handle(),GLFW.GLFW_RED_BITS), GLFWColorManagement.glfwGetWindowSdrWhiteLevel(this.handle()), GLFWColorManagement.glfwGetWindowMaxLuminance(this.handle()) ,GLFWColorManagement.glfwGetWindowMinLuminance(this.handle()),GLFWColorManagement.glfwGetWindowPrimaries(this.handle),GLFWColorManagement.glfwGetWindowTransfer(this.handle())
             );
             HDRMod.LOGGER.info("SDR white level and luminances logged here may not be accurate at this time for Linux users.");
-
-            // Update BeforeBlit. Also add UIBrightness UBO here.
-            RenderPipeline.Builder builder = BeforeBlitRenderer.renderPipelineBuilder.withShaderDefine("CURRENT_PRIMARIES", config.autoSetPrimaries ? GLFWColorManagement.glfwGetWindowPrimaries(this.handle()) : config.customPrimaries.getId()).withShaderDefine("CURRENT_TRANSFER_FUNCTION", config.autoSetTransferFunction ? GLFWColorManagement.glfwGetWindowTransfer(this.handle()) : config.customTransferFunction.getId());
-            for(Enums.Primaries p : Enums.Primaries.values()) {
-                builder = builder.withShaderDefine("PRIMARIES_"+p.toString(), p.getId());
-            }
-            for(Enums.TransferFunction tf : Enums.TransferFunction.values()) {
-                builder = builder.withShaderDefine("TRANSFER_FUNCTION_"+tf.toString(), tf.getId());
-            }
-            builder.withUniform("HdrUIBrightness", UniformType.UNIFORM_BUFFER);
-
-            BeforeBlitRenderer.renderPipelineBuilder = builder;
-            BeforeBlitRenderer.BEFORE_BLIT = builder.build();
         }
     }

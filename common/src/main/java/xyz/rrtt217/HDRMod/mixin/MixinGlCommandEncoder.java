@@ -15,7 +15,8 @@ public class MixinGlCommandEncoder {
     @ModifyArg(method = "copyTextureToBuffer(Lcom/mojang/blaze3d/textures/GpuTexture;Lcom/mojang/blaze3d/buffers/GpuBuffer;JLjava/lang/Runnable;IIIII)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/opengl/GlStateManager;_readPixels(IIIIIIJ)V"), index = 5)
     private int modifyReadPixelFormat(int i){
         if(TextureUpgradeUtils.getTargetReadPixelFormat() < 0) return i;
+        int format = TextureUpgradeUtils.getTargetReadPixelFormat();
         TextureUpgradeUtils.resetTargetReadPixelFormat();
-        return TextureUpgradeUtils.getTargetReadPixelFormat();
+        return format;
     }
 }

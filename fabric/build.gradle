@@ -48,8 +48,8 @@ dependencies {
     modImplementation "maven.modrinth:sodium:mc${minecraft_version}-${sodium_version}-fabric"
     modImplementation "maven.modrinth:advancement-screenshot:1.21.11-5.2-fabric+forge+neo"
     modImplementation "maven.modrinth:collective:1.21.11-8.13-fabric+forge+neo"
-    modImplementation "maven.modrinth:axiom:5.3.0"
-    modImplementation "maven.modrinth:flashback:0.39.1"
+    //modImplementation "maven.modrinth:axiom:5.3.0"
+    //modImplementation "maven.modrinth:flashback:0.39.1"
 
     implementation "org.anarres:jcpp:1.4.14"
     implementation "org.antlr:antlr4-runtime:4.13.1"

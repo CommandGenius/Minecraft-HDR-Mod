@@ -20,13 +20,15 @@ public class MixinGlDevice {
     @ModifyArgs(method = "createTexture(Ljava/lang/String;ILcom/mojang/blaze3d/textures/TextureFormat;IIII)Lcom/mojang/blaze3d/textures/GpuTexture;", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/opengl/GlStateManager;_texImage2D(IIIIIIIILjava/nio/ByteBuffer;)V", ordinal = 1))
     private void hdr_mod$upgradeColorBufferFormat$0(Args args)
     {
+        if((int) args.get(2) != TextureUpgradeUtils.srcTextureFormat) return;
         if(TextureUpgradeUtils.getTargetTextureFormat() > 0){
-            TextureUpgradeUtils.resetTargetTextureFormat();
             args.set(2, TextureUpgradeUtils.getTargetTextureFormat());
+            TextureUpgradeUtils.resetTargetTextureFormat();
+
         }
         if(TextureUpgradeUtils.getTargetReadPixelFormat() > 0){
-            TextureUpgradeUtils.resetTargetReadPixelFormat();
             args.set(7, TextureUpgradeUtils.getTargetReadPixelFormat());
+            TextureUpgradeUtils.resetTargetReadPixelFormat();
         }
     }
 }

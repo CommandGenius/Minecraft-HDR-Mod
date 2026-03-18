@@ -1,7 +1,7 @@
 #version 330
 
 uniform sampler2D InSampler;
-layout(std140) uniform ColorTransforms {
+layout(std140) uniform ColorTransform {
     float uiBrightness;
     float eoftEmulate;
     int primaries;
@@ -75,9 +75,8 @@ void main() {
     color.rgb = sRGB_DecodeSafe(color.rgb);
 
     //To BT2020
-    #if CURRENT_PRIMARIES == PRIMARIES_BT2020
+    if(primaries == PRIMARIES_BT2020)
         color.rgb = BT709_TO_BT2020_MAT * color.rgb;
-    #endif
 
     //EOTF Emulate / Gamma Correction 2.2
     if (eoftEmulate > 0) {
@@ -87,17 +86,19 @@ void main() {
     }
 
     //Transfer
-    #if CURRENT_TRANSFER_FUNCTION == TRANSFER_FUNCTION_ST2084_PQ
+    if(transferFunction == TRANSFER_FUNCTION_ST2084_PQ){
         // PQ encode
         color.rgb = PQ_Encode(color.rgb, uiBrightness);
-    #elif CURRENT_TRANSFER_FUNCTION == TRANSFER_FUNCTION_EXT_LINEAR
+    }
+    else if(transferFunction == TRANSFER_FUNCTION_EXT_LINEAR){
         // scRGB encode
         color.rgb *= uiBrightness / 80.0;
-    #elif (CURRENT_TRANSFER_FUNCTION == TRANSFER_FUNCTION_SRGB) || (CURRENT_TRANSFER_FUNCTION == TRANSFER_FUNCTION_EXT_SRGB)
+    }
+    else if((transferFunction == TRANSFER_FUNCTION_SRGB) || (transferFunction == TRANSFER_FUNCTION_EXT_SRGB)){
         // sRGB encode
         color.rgb *= uiBrightness / 203.0;
         color.rgb = sRGB_EncodeSafe(color.rgb);
-    #endif
+    }
 
     fragColor = color;
 }

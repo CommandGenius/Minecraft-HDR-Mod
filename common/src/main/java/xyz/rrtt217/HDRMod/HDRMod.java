@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
 import org.slf4j.LoggerFactory;
 import xyz.rrtt217.HDRMod.core.BeforeBlitRenderer;
+import xyz.rrtt217.HDRMod.core.ColorTransformRenderer;
 import xyz.rrtt217.HDRMod.core.PngjHDRScreenshot;
 import xyz.rrtt217.HDRMod.core.FloatNumberUBO;
 import org.slf4j.Logger;
@@ -22,6 +23,10 @@ public final class HDRMod {
 
     // Global UI brightness UBO.
     public static FloatNumberUBO UiBrightnessUBO;
+
+    // Global Renderers.
+    public static ColorTransformRenderer PresentationColorTransformRenderer;
+    public static ColorTransformRenderer ScreenshotColorTransformRenderer;
 
     // Key Mapping.
     public static final KeyMapping.Category HDRModCategory = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("hdr_mod","main"));
