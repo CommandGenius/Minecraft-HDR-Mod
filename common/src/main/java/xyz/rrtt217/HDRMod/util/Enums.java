@@ -69,8 +69,8 @@ public class Enums {
     }
 
     public enum BehaviorOnVanillaScreenshotCalled{
-        NONE,
-        SIDE_BY_SIDE,
-        REPLACE
+        ONLY_VANILLA,
+        BOTH,
+        ONLY_HDR
     }
 }

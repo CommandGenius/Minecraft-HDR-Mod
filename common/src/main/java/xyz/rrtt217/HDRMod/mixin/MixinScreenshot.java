@@ -23,17 +23,17 @@ public class MixinScreenshot {
     private static void onVanillaScreenshotCalled(File file, @Nullable String string, RenderTarget renderTarget, int i, Consumer<Component> consumer, CallbackInfo ci){
         HDRModConfig config = AutoConfig.getConfigHolder(HDRModConfig.class).getConfig();
         if(HDRModInjectHooks.getVanillaF2Screenshot()){
-            if (config.behaviorOnVanillaF2 != Enums.BehaviorOnVanillaScreenshotCalled.NONE) {
+            if (config.behaviorOnVanillaF2 != Enums.BehaviorOnVanillaScreenshotCalled.ONLY_VANILLA) {
                 PngjHDRScreenshot.grab(file, string, renderTarget, consumer);
-                if (config.behaviorOnVanillaF2 == Enums.BehaviorOnVanillaScreenshotCalled.REPLACE)
+                if (config.behaviorOnVanillaF2 == Enums.BehaviorOnVanillaScreenshotCalled.ONLY_HDR)
                     ci.cancel();
             }
             HDRModInjectHooks.unsetVanillaF2Screenshot();
         }
         else {
-            if (config.behaviorOnVanillaScreenshotCalled != Enums.BehaviorOnVanillaScreenshotCalled.NONE) {
+            if (config.behaviorOnVanillaScreenshotCalled != Enums.BehaviorOnVanillaScreenshotCalled.ONLY_VANILLA) {
                 PngjHDRScreenshot.grab(file, string, renderTarget, consumer);
-                if (config.behaviorOnVanillaScreenshotCalled == Enums.BehaviorOnVanillaScreenshotCalled.REPLACE)
+                if (config.behaviorOnVanillaScreenshotCalled == Enums.BehaviorOnVanillaScreenshotCalled.ONLY_HDR)
                     ci.cancel();
             }
         }

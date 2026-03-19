@@ -29,29 +29,22 @@ public class HDRModConfig implements ConfigData {
 
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Category("screenshot")
-    public BehaviorOnVanillaScreenshotCalled behaviorOnVanillaScreenshotCalled = BehaviorOnVanillaScreenshotCalled.NONE;
-
+    public BehaviorOnVanillaScreenshotCalled behaviorOnVanillaScreenshotCalled = BehaviorOnVanillaScreenshotCalled.ONLY_VANILLA;
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Category("screenshot")
-    public BehaviorOnVanillaScreenshotCalled behaviorOnVanillaF2 = BehaviorOnVanillaScreenshotCalled.NONE;
+    public BehaviorOnVanillaScreenshotCalled behaviorOnVanillaF2 = BehaviorOnVanillaScreenshotCalled.ONLY_VANILLA;
 
-    @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Category("replay")
     public boolean enableReplayHDRVideoExport = true;
-
     @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Category("replay")
+    public String replayRecommendedCommandline = "-color_primaries bt2020 -color_trc smpte2084 -color_range pc -y -f rawvideo -pix_fmt rgba64 -s %WIDTH%x%HEIGHT% -r %FPS% -i - %FILTERS%-an -colorspace bt2020nc -color_primaries bt2020 -color_trc smpte2084 -color_range pc -c:v libx265 -b:v %BITRATE% -pix_fmt yuv420p10le \\\"%FILENAME%\\\"";
     @ConfigEntry.Category("replay")
     public float replayUIBrightness = 203.0f;
-
-    @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Category("replay")
     public float replayGamePaperWhiteBrightness = 203.0f;
-
-    @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Category("replay")
     public float replayGamePeakBrightness = 10000.0f;
-
-    @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Category("replay")
     public float replayGameMinimumBrightness = 0.0f;
 

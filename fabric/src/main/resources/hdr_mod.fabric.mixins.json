@@ -9,7 +9,8 @@
     "compat.axiom.MixinCustomImGuiImplGl3",
     "compat.flashback.MixinCustomImGuiImplGl3",
     "compat.replaymod.MixinOpenGlFrameCapturer",
-    "compat.replaymod.MixinPboOpenGlFrameCapturer"
+    "compat.replaymod.MixinPboOpenGlFrameCapturer",
+    "compat.replaymod.MixinRenderSettingsEncodingPreset"
   ],
   "injectors": {
     "defaultRequire": 1
