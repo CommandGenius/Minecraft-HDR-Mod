@@ -21,6 +21,8 @@ public final class HDRMod {
 
     // Global Renderers.
     public static ColorTransformRenderer PresentationColorTransformRenderer;
+    public static ColorTransformRenderer ScreenshotColorTransformRenderer;
+    public static ColorTransformRenderer ReplayColorTransformRenderer;
 
     // Key Mapping.
     public static final KeyMapping.Category HDRModCategory = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("hdr_mod","main"));
@@ -38,6 +40,8 @@ public final class HDRMod {
     );
 
     public static boolean enableHDR;
+
+    public static boolean isReplayRendering = false;
 
     public HDRMod() {
     }

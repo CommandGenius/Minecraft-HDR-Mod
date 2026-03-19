@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.util.function.Consumer;
 
 import static xyz.rrtt217.HDRMod.HDRMod.enableHDR;
+import static xyz.rrtt217.HDRMod.HDRMod.ScreenshotColorTransformRenderer;
 
 public class PngjHDRScreenshot {
     public static final String SCREENSHOT_DIR = "screenshots";
@@ -36,16 +37,24 @@ public class PngjHDRScreenshot {
         grab(baseDirectory, null, renderTarget, consumer);
     }
     public static void grab(File baseDirectory, @Nullable String string, RenderTarget renderTarget, Consumer<Component> consumer){
-        try(ColorTransformRenderer screenshotColorTransformRenderer = new ColorTransformRenderer(renderTarget,"Screenshot")) {
             HDRModConfig config = AutoConfig.getConfigHolder(HDRModConfig.class).getConfig();
-            screenshotColorTransformRenderer.updateColorTransformUBO(
+
+            // Create ScreenshotColorTransformRenderer if there's not one.
+            if(ScreenshotColorTransformRenderer == null){
+                ScreenshotColorTransformRenderer = new ColorTransformRenderer(renderTarget, "Screenshot");
+            }
+            // Update ScreenshotColorTransformRenderer.srcTarget.
+            if(ScreenshotColorTransformRenderer.getSrcTarget() != renderTarget){
+                ScreenshotColorTransformRenderer.setSrcTarget(renderTarget);
+            }
+            ScreenshotColorTransformRenderer.updateColorTransformUBO(
                     config.uiBrightness < 0 ? GLFWColorManagement.glfwGetWindowSdrWhiteLevel(Minecraft.getInstance().getWindow().handle()) : config.uiBrightness, // For UI Brightness
                     config.customEotfEmulate < 0 ? GLFWColorManagement.glfwGetWindowSdrWhiteLevel(Minecraft.getInstance().getWindow().handle()) : config.customEotfEmulate,
                     Enums.Primaries.BT2020.getId(),
                     Enums.TransferFunction.ST2084_PQ.getId()
             );
-            screenshotColorTransformRenderer.render();
-            GpuTexture gpuTexture = screenshotColorTransformRenderer.getDstTexture();
+            ScreenshotColorTransformRenderer.render();
+            GpuTexture gpuTexture = ScreenshotColorTransformRenderer.getDstTexture();
             if (gpuTexture == null) {
                 throw new IllegalStateException("color texture is null");
             }
@@ -111,7 +120,6 @@ public class PngjHDRScreenshot {
             }, 0);
             Component component = Component.literal(screenshotFile.getName()).withStyle(ChatFormatting.UNDERLINE).withStyle((style) -> style.withClickEvent(new ClickEvent.OpenFile(screenshotFile.getAbsoluteFile())));
             consumer.accept(Component.translatable("screenshot.success", new Object[]{component}));
-        }
     }
     private static File getScreenshotFile(File baseDirectory) {
         if(!baseDirectory.exists()) {

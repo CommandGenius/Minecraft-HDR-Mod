@@ -28,16 +28,38 @@ public class HDRModConfig implements ConfigData {
     public float customEotfEmulate = System.getProperty("os.name").startsWith("Windows") ? -1.0f : 0.0f;
 
     @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.Category("mod_compat")
+    @ConfigEntry.Category("screenshot")
     public BehaviorOnVanillaScreenshotCalled behaviorOnVanillaScreenshotCalled = BehaviorOnVanillaScreenshotCalled.NONE;
 
     @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.Category("mod_compat")
+    @ConfigEntry.Category("screenshot")
     public BehaviorOnVanillaScreenshotCalled behaviorOnVanillaF2 = BehaviorOnVanillaScreenshotCalled.NONE;
 
     @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Category("replay")
+    public boolean enableReplayHDRVideoExport = true;
+
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Category("replay")
+    public float replayUIBrightness = 203.0f;
+
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Category("replay")
+    public float replayGamePaperWhiteBrightness = 203.0f;
+
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Category("replay")
+    public float replayGamePeakBrightness = 10000.0f;
+
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.Category("replay")
+    public float replayGameMinimumBrightness = 0.0f;
+
+    // Due to export pixel format, the primaries is always Rec.2020 and tf always PQ.
+
+    @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Category("advanced")
-    public boolean useRGBA16UNORM = System.getProperty("os.name").toLowerCase().contains("linux");
+    public boolean useUNORMWindowPixelFormat = System.getProperty("os.name").toLowerCase().contains("linux");
 
     @ConfigEntry.Category("debug")
     public boolean autoSetPrimaries = true;
@@ -48,7 +70,7 @@ public class HDRModConfig implements ConfigData {
     @ConfigEntry.Category("debug")
     public TransferFunction customTransferFunction = TransferFunction.SRGB;
     @ConfigEntry.Category("debug")
-    public boolean forceDisableGlfwWorkound = false;
+    public boolean forceDisableGlfwWorkaround = false;
     @ConfigEntry.Category("debug")
     public boolean forceDisableBeforeBlitPipeline = false;
 }
