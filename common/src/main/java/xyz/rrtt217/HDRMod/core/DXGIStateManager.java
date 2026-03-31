@@ -15,7 +15,7 @@ public class DXGIStateManager {
             if(texture != GLFWDXGIUtils.glfwGetWindowSwapchainImageTexture(Minecraft.getInstance().getWindow().handle())){
                 texture = GLFWDXGIUtils.glfwGetWindowSwapchainImageTexture(Minecraft.getInstance().getWindow().handle());
                 if(texture == 0) return originalFbo;
-                bindFrameBufferTextures(fbo, texture, 0, 0, 0,false);
+                bindFrameBufferTextures(fbo, texture, 0, 0, GL30.GL_FRAMEBUFFER,false);
             }
             return fbo;
         }
