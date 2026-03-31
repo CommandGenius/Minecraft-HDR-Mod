@@ -71,6 +71,7 @@ import static xyz.rrtt217.HDRMod.HDRMod.enableHDR;
                 else if(applyWindowsWorkaround) {
                     GLFW.glfwWindowHint(0x00021011,GLFW.GLFW_TRUE);
                     GLFW.glfwWindowHint(0x00025003,GLFW.GLFW_TRUE);
+                    GLFW.glfwWindowHint(0x00025004,GLFW.GLFW_TRUE);
                     HDRMod.LOGGER.warn("A workaround has been applied for your platform and hardware. HDR Mod may or may not work.");
                 }
             }
