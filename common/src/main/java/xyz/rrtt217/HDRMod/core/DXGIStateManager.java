@@ -16,7 +16,7 @@ public class DXGIStateManager {
     private static int currentWidth = 0;
     private static int currentHeight = 0;
     private static boolean currentIsMinimized = false;
-    public static int update(int originalFbo) {
+    public static int replaceFbo(int originalFbo) {
     if (originalFbo != 0 || GLFW.glfwGetPlatform() != GLFW.GLFW_PLATFORM_WIN32)
         return originalFbo;
 

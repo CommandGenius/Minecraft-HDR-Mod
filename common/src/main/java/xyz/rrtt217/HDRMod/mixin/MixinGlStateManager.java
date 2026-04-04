@@ -10,6 +10,6 @@ import xyz.rrtt217.HDRMod.core.DXGIStateManager;
 public class MixinGlStateManager {
     @ModifyVariable(method = "_glBindFramebuffer", at = @At("HEAD"), argsOnly = true, index = 1)
     private static int hdr_mod$useDxgiPbo(int value){
-        return DXGIStateManager.update(value);
+        return DXGIStateManager.replaceFbo(value);
     }
 }
