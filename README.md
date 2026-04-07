@@ -1,13 +1,15 @@
 # Minecraft HDR Mod
-A minecraft mod that enables native HDR on Windows/Linux with Iris shaders. Currently, in early development.
+[中文](https://github.com/rrtt217/Minecraft-HDR-Mod/blob/master/README-zh.md) | English
+
+A minecraft mod that enables native HDR on Windows / macOS / Linux with Iris shaders. Currently, in active development.
 [![PhotonHDRPic](https://i.postimg.cc/tgRwc3x5/2026-02-15-20-07-37-hdr.png)](https://postimg.cc/LJ7xYZvY)
 ([Photon](https://modrinth.com/shader/photon-shader) patched to HDR w/ [Patrix](https://modrinth.com/resourcepack/patrix-32x), taken by mod's screenshot feature.)
 ## What the mod have achieved
-- Native HDR, both for Windows scRGB and HDR10/PQ.
-- UI color correction by a BEFORE_BLIT pass.
+- Native HDR, both for scRGB and HDR10/PQ.
+- UI color correction by a new render pass.
 - Ingame config using Cloth Config API.
 - Ingame HDR screenshot.
-- Replay Mod HDR Video Export (only for versions above 1.21.10, need custom FFmpeg commandline, which can be found in config menu)
+- Replay Mod HDR Video Export (need custom FFmpeg commandline, which can be found in config menu)
 ## For Users
 - See XgarhontX's temporary patches for HDR output and tonemapping on select shaderpacks with support for this mod: [Google Sheets](https://docs.google.com/spreadsheets/d/1WgOqKED2FxC11-2oyW4aBIyl8tAHo-8WJ7JPxhYAO2Q/edit?gid=0#gid=0)
   - See some pics here: [Wiki](https://github.com/rrtt217/Minecraft-HDR-Mod/wiki#gallery)
@@ -35,7 +37,7 @@ A minecraft mod that enables native HDR on Windows/Linux with Iris shaders. Curr
         export MESA_LOADER_DRIVER_OVERRIDE=zink
         export GALLIUM_DRIVER=zink
         ```
-      - **ONLY WORKS ON Mesa >= 26.0.0**. Lower versions crash your game due to the lack of [This PR](https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/37693), So you should probably compile by yourself.
+      - **ONLY WORKS ON Mesa >= 26.0.0**. Lower versions crash your game due to the lack of [This PR](https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/37693).
 ## For Shader Packs
 ### Wiki Tutorial
 - [For Shaderpack Devs](https://github.com/rrtt217/Minecraft-HDR-Mod/wiki/For-Shaderpack-Devs)
@@ -54,8 +56,6 @@ Use these uniforms inside `#if HDR_MOD_INSTALLED` block.
 ### Output
 the output of the shader(aka. what is written to main render target in final pass) should have **scRGB-nl encoding(Rec.709 primaries, sRGB (for negative numbers use −f(−x)) transfer function)**, and you should not use RGBA8F for scene color.
 - [Wiki Section](https://github.com/rrtt217/Minecraft-HDR-Mod/wiki/For-Shaderpack-Devs#4-ui-scaling--expected-output)
-## Known Issue
-- Xaero Map may cause black screen on startup, but recover to normal before you see title screen.
 ## Credits
 - Tom94, for [glfw fork with color management](https://github.com/Tom94/glfw/tree/color-management);
 - IMS212, for [Iris shaders](https://github.com/IrisShaders/Iris) and [original glfw patch idea](https://github.com/IMS212/glfw/tree/hdr);
