@@ -5,9 +5,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.rrtt217.HDRMod.util.GLFWColorManagement;
+import xyz.rrtt217.HDRMod.util.GLFWColorManagementUtils;
 
-@Mixin(value = GLFWColorManagement.class, remap = false)
+@Mixin(value = GLFWColorManagementUtils.class, remap = false)
 public class MixinGLFWColorManagement {
 
     @Inject(method = "glfwGetWindowSdrWhiteLevel", at = @At("HEAD"), cancellable = true, remap = false)
@@ -15,7 +15,7 @@ public class MixinGLFWColorManagement {
                                                              CallbackInfoReturnable<Float> cir) {
         IxerisApi api = IxerisApi.getInstance();
         if (api.isEnabled() && !api.isOnMainThreadOrInit()) {
-            cir.setReturnValue(api.query(() -> GLFWColorManagement.glfwGetWindowSdrWhiteLevel(window)));
+            cir.setReturnValue(api.query(() -> GLFWColorManagementUtils.glfwGetWindowSdrWhiteLevel(window)));
         }
     }
 
@@ -24,7 +24,7 @@ public class MixinGLFWColorManagement {
                                                             CallbackInfoReturnable<Float> cir) {
         IxerisApi api = IxerisApi.getInstance();
         if (api.isEnabled() && !api.isOnMainThreadOrInit()) {
-            cir.setReturnValue(api.query(() -> GLFWColorManagement.glfwGetWindowMinLuminance(window)));
+            cir.setReturnValue(api.query(() -> GLFWColorManagementUtils.glfwGetWindowMinLuminance(window)));
         }
     }
 
@@ -33,7 +33,7 @@ public class MixinGLFWColorManagement {
                                                             CallbackInfoReturnable<Float> cir) {
         IxerisApi api = IxerisApi.getInstance();
         if (api.isEnabled() && !api.isOnMainThreadOrInit()) {
-            cir.setReturnValue(api.query(() -> GLFWColorManagement.glfwGetWindowMaxLuminance(window)));
+            cir.setReturnValue(api.query(() -> GLFWColorManagementUtils.glfwGetWindowMaxLuminance(window)));
         }
     }
 
@@ -42,7 +42,7 @@ public class MixinGLFWColorManagement {
                                                          CallbackInfoReturnable<Integer> cir) {
         IxerisApi api = IxerisApi.getInstance();
         if (api.isEnabled() && !api.isOnMainThreadOrInit()) {
-            cir.setReturnValue(api.query(() -> GLFWColorManagement.glfwGetWindowPrimaries(window)));
+            cir.setReturnValue(api.query(() -> GLFWColorManagementUtils.glfwGetWindowPrimaries(window)));
         }
     }
 
@@ -51,7 +51,7 @@ public class MixinGLFWColorManagement {
                                                         CallbackInfoReturnable<Integer> cir) {
         IxerisApi api = IxerisApi.getInstance();
         if (api.isEnabled() && !api.isOnMainThreadOrInit()) {
-            cir.setReturnValue(api.query(() -> GLFWColorManagement.glfwGetWindowTransfer(window)));
+            cir.setReturnValue(api.query(() -> GLFWColorManagementUtils.glfwGetWindowTransfer(window)));
         }
     }
 }
