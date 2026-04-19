@@ -12,7 +12,7 @@
     "compat.replaymod.MixinPboOpenGlFrameCapturer",
     "compat.replaymod.MixinRenderSettingsEncodingPreset",
     "compat.ixeris.MixinDXGIStateManager",
-    "compat.ixeris.MixinGLFWColorManagement"
+    "compat.ixeris.MixinGLFWColorManagementUtils"
   ],
   "injectors": {
     "defaultRequire": 1

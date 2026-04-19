@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.rrtt217.HDRMod.util.GLFWColorManagementUtils;
 
 @Mixin(value = GLFWColorManagementUtils.class, remap = false)
-public class MixinGLFWColorManagement {
+public class MixinGLFWColorManagementUtils {
 
     @Inject(method = "glfwGetWindowSdrWhiteLevel", at = @At("HEAD"), cancellable = true, remap = false)
     private static void hdr_mod$getSdrWhiteLevelOnMainThread(long window,
